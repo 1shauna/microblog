@@ -1,0 +1,33 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }} - Microblog</title>
+    {% else %}
+    <title>My Microblog</title>
+    {% endif %}
+  </head>
+
+  <body>
+    <div>Microblog:
+      <!-- instead of hardcoding link hrefs, use url_for() -->
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('login') }}">Login</a>
+    </div>
+    <hr>
+
+    {% with messages = get_flashed_messages() %}
+    <!-- An interesting property of these flashed messages is that once they are requested once through the get_flashed_messages function they are removed from the message list, so they appear only once after the flash() function is called. -->
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <!-- block content defines where the derived templates can insert themselves -->
+    {% block content %}{% endblock %}
+
+  </body>
+</html>
