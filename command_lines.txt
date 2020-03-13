@@ -48,5 +48,17 @@ Just as a reminder, here are some of the command line commands!
 	`for p in posts:
 		db.session.delete(p)`
 	`db.session.commit()`
---> End of IPython session <--
 
+
+PASSWORD HASHING
+`from werkzeug.security import generate_password_hash, check_password_hash`
+`hash = generate_password_hash('foobar')` --> generates a hashed password
+`check_password_hash(hash, 'foobar')` --> T/F whether foobar is the password or not - you can't "unhash" a hash, but you CAN check if the password gives this hash (if you re-hash a password, you'll also get a different hash).
+
+`u = User(username='susan', email='susan@example.com')`
+`u.set_password('mypwd')`
+`u.check_password('hack_attempt')` --> False
+`u.check_password('mypwd')` --> True
+
+
+--> End of IPython session <--

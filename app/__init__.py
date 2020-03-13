@@ -5,13 +5,11 @@ from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager
 
 # create instance
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
 # ==========================================================
 # One aspect that may seem confusing at first
 # is that there are two entities named app.
@@ -22,7 +20,32 @@ migrate = Migrate(app, db)
 # in the __init__.py script,
 # which makes it a member of the app package.
 # ==========================================================
-# The bottom import is a workaround to circular imports,
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+login = LoginManager(app)
+login.login_view = 'login'
+# The 'login' value is the function (or endpoint) name for the login view.
+# In other words, the name you would use in a url_for() call to get the URL.
+# ==========================================================
+# If a user who is not logged in tries to view a protected page,
+# Flask-Login will automatically redirect the user to the login form,
+# and only redirect back to the page the user wanted to view
+# after the login process is complete.
+# For this feature to be implemented, Flask-Login needs to know
+# what is the view function that handles logins.
+# ==========================================================
+
+
+
+
+
+
+
+# The routes module has the URLs for our app.
+# The models will define the structure of the db
+from app import routes, models
+# =========================================================
+# This bottom import is a workaround to circular imports,
 # a common problem with Flask applications.
 # You are going to see that the routes module
 # needs to import the app variable defined in this script,
@@ -32,8 +55,3 @@ migrate = Migrate(app, db)
 # ==========================================================
 
 
-from app import routes, models
-# routes module has the URLs for our app
-# in Flask, handlers for the app routes are called *view functions*
-
-# models will define the structure of the db
