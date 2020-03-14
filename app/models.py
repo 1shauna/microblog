@@ -2,6 +2,7 @@ from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
 
 class User(UserMixin, db.Model):
 	""" fields:
@@ -40,6 +41,8 @@ class User(UserMixin, db.Model):
 	# the user given a post. The lazy argument defines how
 	# the database query for the relationship will be issued.
 	# =======================================================
+	about_me = db.Column(db.String(140))
+	last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
@@ -60,6 +63,18 @@ class User(UserMixin, db.Model):
 
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
+
+	def avatar(self, size):
+		# encoded as byes before passing to hash function
+		digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+		return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
+	# ===============================================================
+	# The nice thing about making the User class responsible
+	# for returning avatar URLs is that if some day I decide
+	# Gravatar avatars are not what I want, I can just rewrite
+	# the avatar() method to return different URLs, and all the templates
+	# will start showing the new avatars automatically.
+	# ================================================================
 
 # command line: flask db init
 # ==============================================================

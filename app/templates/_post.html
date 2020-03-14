@@ -1,0 +1,14 @@
+<!--
+The _ prefix of this file is just a naming conventionto help
+the author recognize which template files are sub-templates
+ -->
+ <!--
+	Sub templates are INCLUDED into the template (see user.html)
+  -->
+
+ <table>
+ 	<tr valign="top">
+ 		<td><img src="{{ post.author.avatar(36) }}"></td>
+ 		<td>{{ post.author.username }} says: <br>{{ post.body }}</td>
+ 	</tr>
+ </table>
