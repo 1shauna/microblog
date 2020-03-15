@@ -49,3 +49,20 @@ class EditProfileForm(FlaskForm):
 	username = StringField("Username", validators=[DataRequired()])
 	about_me = TextAreaField("About me", validators=[Length(min=0, max=140)])
 	submit = SubmitField("Submit")
+
+	# =======================================================================
+	# During registration, I need to make sure the username entered
+	# in the form does not exist in the database. On the edit profile form
+	# I have to do the same check, but with one exception. If the user
+	# leaves the original username untouched, then the validation should
+	# allow it, since that username is already assigned to that user.
+	# =======================================================================
+	def __init__(self, original_username, *args, **kwargs):
+		super(EditProfileForm, self).__init__(*args, **kwargs)
+		self.original_username = original_username
+
+	def validate_username(self, username):
+		if username.data != self.original_username:
+			user = User.query.filter_by(username=self.username.data).first()
+			if user is not None:
+				raise ValidationError('Please use a different username.')

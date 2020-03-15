@@ -1,56 +1,57 @@
 
 Just as a reminder, here are some of the command line commands!
 
-** set your virtual environment variables, such as:
+Set your virtual environment variables:
 - FLASK_APP --> the file to run it all
 - FLASK_ENV --> default is production. development includes debug on.
 - FLASK_DEBUG --> 1 for on, 0 for off
 - DATABASE_URL --> ???
 
+The debugger allows you expand each stack frame and see the corresponding source code.
+You can also open a Python prompt on any of the frames and execute any valid Python expressions, for example to check the values of variables.
 
+Run the app:
 `flask run` runs the FLASK_APP.
 `flask db init` initiates the database (empty I believe)
 `flask db migrate` sets some changes up
 `flask db upgrade` commits those changes in the database
 
-
 `flask shell` --> opens a python shell with everything already imported!
 
---> These are in IPython <--
 
-	`u = User(username='susan', email='susan@example.com')` adds susan as a user
-	`db.session.add( user )` adds user to the database
-	`db.session.commit()` commits the database
-	`db.session.rollback()` aborts the session & removes any stored changes
-	`users = User.query.all()` queries all users
+In IPython:
+`u = User(username='susan', email='susan@example.com')` adds susan as a user
+`db.session.add( user )` adds user to the database
+`db.session.commit()` commits the database
+`db.session.rollback()` aborts the session & removes any stored changes
+`users = User.query.all()` queries all users
 
-	if you know the ID of a user (or any primary key?), you can query that way:
-	`u = User.query.get(1)` --> u returns <User john>
+- If you know the ID of a user (or any primary key?) with
+`u = User.query.get(1)` --> u returns <User john>
 
-	Add a blog post!
-	`u = User.query.get(1)`
-	`p = Post(body='my first post!!', author=u)
-	`db.session.add(p)`
-	`db.session.commit()`
+- Add a blog post!
+`u = User.query.get(1)`
+`p = Post(body='my first post!!', author=u)
+`db.session.add(p)`
+`db.session.commit()`
 
-	Get all posts of an author
-	`u.posts.all()` --> where u is a user, like as above
-	`posts = Post.query.all()`
-	`for p in posts:
-		print(p.id, p.author.username, p.body)`
-	`User.query.order_by(User.username.desc()).all()`
+- Get all posts of an author
+`u.posts.all()` --> where u is a user, like as above
+`posts = Post.query.all()`
+`for p in posts:
+	print(p.id, p.author.username, p.body)`
+`User.query.order_by(User.username.desc()).all()`
 
-	Delete everything from IPython
-	`users = User.query.all()`
-	`for u in users:
-		db.session.delete(u)`
-	`posts = Post.query.all()`
-	`for p in posts:
-		db.session.delete(p)`
-	`db.session.commit()`
+- Delete everything from IPython
+`users = User.query.all()`
+`for u in users:
+	db.session.delete(u)`
+`posts = Post.query.all()`
+`for p in posts:
+	db.session.delete(p)`
+`db.session.commit()`
 
-
-PASSWORD HASHING
+- PASSWORD HASHING
 `from werkzeug.security import generate_password_hash, check_password_hash`
 `hash = generate_password_hash('foobar')` --> generates a hashed password
 `check_password_hash(hash, 'foobar')` --> T/F whether foobar is the password or not - you can't "unhash" a hash, but you CAN check if the password gives this hash (if you re-hash a password, you'll also get a different hash).
@@ -60,5 +61,24 @@ PASSWORD HASHING
 `u.check_password('hack_attempt')` --> False
 `u.check_password('mypwd')` --> True
 
+TESTING EMAIL LOGGING:
+There are 2 approaches to test this feature
+- error: a user's logged in, edits profile to the username of another user
 
---> End of IPython session <--
+Approach 1: configure a fake email server
+- In a new/second terminal session, type
+`python -m smtpd -n -c DebuggingServer localhost:8025`
+- leave this running, go back to your first terminal to type
+`export MAIL_SERVER=localhost`
+`export MAIL_PORT=8025`
+`export FLASK_DEBUG=0` (or not set at all)
+- Run the app and trigger the SQLAlchemy error to see how the terminal session running the fake email server shows an email with the full stack trace of the error.
+
+Approach 2: configure a real email server - here's the config for Gmail
+`export MAIL_SERVER=smtp.googlemail.com`
+`export MAIL_PORT=587`
+`export MAIL_USE_TLS=1`
+`export MAIL_USERNAME=<your_gmail_username>`
+`export MAIL_PASSWORD=<your_gmail_password>`
+
+Save logs to a file
