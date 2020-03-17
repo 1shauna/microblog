@@ -158,7 +158,7 @@ class User(UserMixin, db.Model):
 		# `own` is the user's own posts, because apparently users (evwhere)
 		# like to see their own posts on their followed posts. Dunno.
 		# Then join these 2 queries with union,
-		# and order by the post's timestamp, descending (most recent first)
+		# and order by the post's timestamp, descending (most recent)
 
 
 
