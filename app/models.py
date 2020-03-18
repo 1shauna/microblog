@@ -1,8 +1,10 @@
 from datetime import datetime
-from app import db, login
+from app import db, login, app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from time import time
+import jwt
 
 # Since this is an auxiliary table that has no data other than
 # the foreign keys, it's created without an associated model class.
@@ -159,6 +161,22 @@ class User(UserMixin, db.Model):
 		# like to see their own posts on their followed posts. Dunno.
 		# Then join these 2 queries with union,
 		# and order by the post's timestamp, descending (most recent)
+
+	def get_reset_password_token(self, expires_in=600):
+		return jwt.encode(
+			{'reset_password': self.id, 'exp': time() + expires_in},
+			app.config['SECRET_KEY'], algorithm="HS256").decode('utf-8')
+		# jwt.encode() returns a byte sequence, so decode it
+
+	@staticmethod
+	def verify_reset_password_token(token):
+		try:
+			id = jwt.decode(token, app.config['SECRET_KEY'],
+							algorithms=['HS256'])['reset_password']
+		except:
+			# if cannot be validated, or is expired
+			return
+		return User.query.get(id)
 
 
 
