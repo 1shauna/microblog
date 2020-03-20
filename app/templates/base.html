@@ -1,44 +1,62 @@
-<html>
-  <head>
-    {% if title %}
-    <title>{{ title }} - Microblog</title>
-    {% else %}
-    <title>My Microblog</title>
+
+{% extends 'bs-f_base.html' %}
+
+{% from 'bootstrap/nav.html' import render_nav_item as rni %}
+
+
+  {% block title %}
+    {% if title %}{{ title }} - Microblog
+    {% else %}My Microblog
     {% endif %}
-  </head>
+  {% endblock title %}
 
-  <body>
-    <div>Microblog:
-      <!-- instead of hardcoding link hrefs, use url_for() -->
-      <a href="{{ url_for('index') }}">Home</a>
 
-      <!--
-      The is_anonymous property is one of the attributes that Flask-Login adds to user objects through the UserMixin class. The current_user.is_anonymous expression is going to be True only when the user is not logged in.
-       -->
-      {% if current_user.is_anonymous %}
-      <a href="{{ url_for('login') }}">Login</a>
-      {% else %}
-      <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-      <a href="{{ url_for('explore') }}">Explore</a>
-      <a href="{{ url_for('logout') }}">Logout</a>
-      {% endif %}
+
+  {% block navbar %}
+  <nav class='navbar navbar-default'>
+    <div class='container'>
+
+      <div class='navbar-header'>
+        <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1' aria-expanded='false'>
+        </button>
+        {{ rni('index', 'Microblog') }}
+      </div>
+
+      <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+        <ul class='navbar-nav'>
+          {{ rni('index', 'Home', use_li=True) }}
+          {{ rni('explore', 'Explore', use_li=True) }}
+        </ul>
+        <ul class='navbar-nav navbar-right'>
+          {% if current_user.is_anonymous %}
+            {{ rni('login', 'Login', use_li=True) }}
+          {% else %}
+            {{ rni('user', 'Profile', use_li=True, username=current_user.username) }}
+            {{ rni('logout', 'Logout', use_li=True) }}
+          {% endif %}
+        </ul>
+      </div>
 
     </div>
-    <hr>
+  </nav>
+  {% endblock navbar %}
 
-    {% with messages = get_flashed_messages() %}
-    <!-- An interesting property of these flashed messages is that once they are requested once through the get_flashed_messages function they are removed from the message list, so they appear only once after the flash() function is called. -->
-    {% if messages %}
-    <ul>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
 
-    <!-- block content defines where the derived templates can insert themselves -->
-    {% block content %}{% endblock %}
 
-  </body>
-</html>
+  {% block content %}
+    <div class='container'>
+
+      {% with messages = get_flashed_messages() %}
+      <!-- An interesting property of these flashed messages is that once they are requested once through the get_flashed_messages function they are removed from the message list, so they appear only once after the flash() function is called. -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class='alert alert-info' role='alert'>{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- The block named `content` is used by Flask-Bootstrap, so I renamed my content block as `app_content`, as below. -->
+      {% block app_content %}{% endblock %}
+
+    </div>
+  {% endblock content %}

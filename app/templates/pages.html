@@ -1,0 +1,42 @@
+
+
+{% from 'bootstrap/pagination.html' import render_pager as pager, render_pagination as pagination %}
+
+
+{% if posts %}
+
+  {{ pager(
+  	posts,
+  	prev=('<span aria-hidden="true">&larr;</span>   Newer posts')|safe, next=("Older posts   <span aria-hidden='true'>&rarr;</span>")|safe
+  	) }}
+
+  {{ pagination(
+  	posts,
+  	endpoint='#',
+  	prev=('<span aria-hidden="true">&larr;</span>   Newer posts')|safe, next=("Older posts   <span aria-hidden='true'>&rarr;</span>")|safe,
+  	class='pager'
+  	) }}
+
+{% endif %}
+
+
+
+
+
+
+
+
+<!--   <nav aria-label='...'>
+    <ul class='pager'>
+      <li class='previous{% if not prev_url %} disabled{% endif %}'>
+        <a href="{{ prev_url or '#' }}">
+          <span aria-hidden='true'>&larr;</span> Newer posts
+        </a>
+      </li>
+      <li class='next{% if not next_url %} disabled{% endif %}'>
+        <a href="{{ next_url or '#' }}">
+          Older posts <span aria-hidden='true'>&rarr;</span>
+        </a>
+      </li>
+    </ul>
+  </nav> -->

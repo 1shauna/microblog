@@ -1,8 +1,27 @@
 {% extends "base.html" %}
 
-{% block content %}
+<!--
+Instead of having to style the form fields one by one, Flask-Bootstrap comes with a macro that accepts a Flask-WTF form object as an argument and renders the complete form using Bootstrap styles.
+ -->
+{% from 'bootstrap/form.html' import render_form as rf %}
+
+
+{% block app_content %}
 	<h1>Register</h1>
-	<form action="" method='post'>
+	<div class='row'>
+		<div class='col-md-4'>
+			{{ rf(form) }}
+		</div>
+	</div>
+{% endblock %}
+<!--
+The import statement near the top works similarly to a Python import on the template side. That adds a wtf.quick_form() macro that in a single line of code renders the complete form, including support for display validation errors, and all styled as appropriate for the Bootstrap framework.
+ -->
+
+
+
+<!-- BELOW IS WHAT HAS BEEN REPLACED BY the whole outer div!!! WoW! -->
+	<!-- <form action="" method='post'>
 		{{ form.hidden_tag() }}
 		<p>
 			{{ form.username.label }}<br>
@@ -33,5 +52,4 @@
 			{% endfor %}
 		</p>
 		<p>{{ form.submit() }}</p>
-	</form>
-{% endblock %}
+	</form> -->

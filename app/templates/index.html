@@ -1,33 +1,30 @@
 
 {% extends "base.html" %}
 
-{% block content %}
+{% from 'bootstrap/form.html' import render_form as rf %}
+{% from 'bootstrap/pagination.html' import render_pagination as pagination %}
 
+
+
+{% block app_content %}
   <h1>Hey there, {{ current_user.username }}!</h1>
 
   {% if form %}
-  <form action="" method="post">
-  	{{ form.hidden_tag() }}
-  	<p>
-  		{{ form.post.label }}<br>
-  		{{ form.post(cols=32, rows=4) }}<br>
-  		{% for error in form.post.errors %}
-  		<span style="color:red;">[{{ error }}]</span>
-  		{% endfor %}
-  	</p>
-  	<p>{{ form.submit() }}</p>
-  </form>
+    {{ rf(form) }}
+    <br>
   {% endif %}
 
   {% for post in posts %}
   	{% include '_post.html' %}
   {% endfor %}
 
-  {% if prev_url %}
-  	<a href="{{ prev_url }}">Newer posts</a>
-  {% endif %}
-  {% if next_url %}
-  	<a href="{{ next_url }}">Older posts</a>
-	{% endif %}
+  <hr>
+  <p>A fancier pagination style:</p>
+  {{ pagination(
+      pages,
+      prev=('<span aria-hidden="true">&larr;</span> Newer posts')|safe,
+      next=("Older posts <span aria-hidden='true'>&rarr;</span>")|safe
+  ) }}
+
 
 {% endblock %}
