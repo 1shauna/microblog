@@ -34,3 +34,5 @@ class Config(object):
 	ADMINS = ['shauna.kerr@gmail.com'] # who will receive error reports
 
 	POSTS_PER_PAGE = 3
+
+	LANGUAGES = ['en', 'fr']

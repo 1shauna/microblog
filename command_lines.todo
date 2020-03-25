@@ -82,3 +82,55 @@ Approach 2: configure a real email server - here's the config for Gmail
 `export MAIL_PASSWORD=<your_gmail_password>`
 
 Save logs to a file
+
+In file `babel.cfg`:
+  The first two lines define the filename patterns for Python and Jinja2 template files respectively. The third line defines two extensions provided by the Jinja2 template engine that help Flask-Babel properly parse template files.
+
+To extract all the texts to the .pot file, you can use the following command;
+
+(venv) $ pybabel extract -F babel.cfg -k _l -o messages.pot .
+
+The pybabel extract command reads the configuration file given in the -F option, then scans all the code and template files in the directories that match the configured sources, starting from the directory given in the command (the current directory or . in this case). By default, pybabel will look for _() as a text marker, but I have also used the lazy version, which I imported as _l(), so I need to tell the tool to look for those too with the -k _l. The -o option provides the name of the output file.
+
+I should note that the messages.pot file is not a file that needs to be incorporated into the project. This is a file that can be easily regenerated any time it is needed, simply by running the command above again. So there is no need to commit this file to source control.
+
+Then
+
+(venv) $ pybabel init -i messages.pot -d app/translations -l es
+creating catalog app/translations/es/LC_MESSAGES/messages.po based on messages.pot
+
+The pybabel init command takes the messages.pot file as input and writes a new language catalog to the directory given in the -d option for the language specified in the -l option. I'm going to be installing all the translations in the app/translations directory, because that is where Flask-Babel will expect translation files to be by default. The command will create a es subdirectory inside this directory for the Spanish data files. In particular, there will be a new file named app/translations/es/LC_MESSAGES/messages.po, that is where the translations need to be made.
+
+If you want to support other languages, just repeat the above command with each of the language codes you want, so that each language gets its own repository with a messages.po file.
+
+This messages.po file that created in each language repository uses a format that is the de facto standard for language translations, the format used by the gettext utility.
+
+The empty strings in `messages.po` need to be edited to have the version of the text in the target language.
+
+There are many translation applications that work with .po files. If you feel comfortable editing the text file, then that's sufficient, but if you are working with a large project it may be recommended to work with a specialized editor. The most popular translation application is the open-source poedit, which is available for all major operating systems. If you are familiar with vim, then the po.vim plugin gives some key mappings that make working with these files easier.
+
+The messages.po file is a sort of source file for translations. When you want to start using these translated texts, this file needs to be compiled into a format that is efficient to be used by the application at run-time. To compile all the translations for the application, you can use the pybabel compile command as follows
+
+(venv) $ pybabel compile -d app/translations
+compiling catalog app/translations/es/LC_MESSAGES/messages.po to
+app/translations/es/LC_MESSAGES/messages.mo
+
+This operation adds a messages.mo file next to messages.po in each language repository. The .mo file is the file that Flask-Babel will use to load translations for the application.
+
+After you create the messages.mo file for Spanish or any other languages you added to the project, these languages are ready to be used in the application. If you want to see how the application looks in Spanish, you can edit the language configuration in your web browser to have Spanish as the preferred language.
+
+If you prefer not to change your browser settings, the other alternative is to force a language by making the localeselector function always return it. For Spanish, this would be how you would do it
+
+app/__init__.py: Select best language.
+
+@babel.localeselector
+def get_locale():
+    # return request.accept_languages.best_match(app.config['LANGUAGES'])
+    return 'es'
+Running the application with the browser configured for Spanish, or the localeselector function returning es will make all the texts appear in Spanish when you use the application.
+
+If you have missed some _() or _l() wrappers in your files, you will need to update your `messages.po`:
+  (venv) $ pybabel extract -F babel.cfg -k _l -o messages.pot .
+  (venv) $ pybabel update -i messages.pot -d app/translations
+
+  The extract command is identical to the one I issued earlier, but now it will generate a new version of messages.pot with all the previous texts plus anything new that you recently wrapped with _() or _l(). The update call takes the new messages.pot file and merges it into all the messages.po files associated with the project. This is going to be an intelligent merge, in which any existing texts will be left alone, while only entries that were added or removed in messages.pot will be affected.

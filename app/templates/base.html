@@ -10,19 +10,19 @@
       <button type='button' class='navbar-toggler' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1' aria-expanded='false' aria-label='Toggle navigation'>
         <span class='navbar-toggler-icon'></span>
       </button>
-      <a class="navbar-brand" href='/index'>HomeAlone</a>
+      <a class="navbar-brand" href='/index'>{{ _('HomeAlone') }}</a>
 
       <div class='collapse navbar navbar-collapse d-flex justify-content-between' id='bs-example-navbar-collapse-1'>
         <ul class='navbar-nav nav-pills'>
-          {{ rni('index', 'Home', use_li=True) }}
-          {{ rni('explore', 'Explore', use_li=True) }}
+          {{ rni('index', _('Home'), use_li=True) }}
+          {{ rni('explore', _('Explore'), use_li=True) }}
         </ul>
         <ul class='navbar-nav nav-pills'>
           {% if current_user.is_anonymous %}
-            {{ rni('login', 'Login', use_li=True) }}
+            {{ rni('login', _('Login'), use_li=True) }}
           {% else %}
-            {{ rni('user', 'Profile', username=current_user.username) }}
-            {{ rni('logout', 'Logout', use_li=True) }}
+            {{ rni('user', _('Profile'), username=current_user.username) }}
+            {{ rni('logout', _('Logout'), use_li=True) }}
           {% endif %}
         </ul>
       </div>

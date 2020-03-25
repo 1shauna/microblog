@@ -10,8 +10,8 @@
       {% block styles %}{{ bootstrap.load_css() }}{% endblock %}
 
       <title>
-        {% if title %}{{ title }} - Microblog
-        {% else %}My Microblog
+        {% if title %}{{ title }}{{ - _('Microblog') }}
+        {% else %}{{ _('My Microblog') }}
         {% endif %}
       </title>
 
@@ -26,6 +26,7 @@
   {% block scripts %}
     {{ bootstrap.load_js() }}
     {{ moment.include_moment() }}
+    {{ moment.lang(g.locale) }}
   {% endblock %}
 
 </body>

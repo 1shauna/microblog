@@ -3,7 +3,11 @@
 
 {% block app_content %}
 
-	<h1>File Not Found</h1>
-	<p><a href="{{ url_for('index') }}">Back</a></p>
+	<h1>{{ _('File Not Found') }}</h1>
+	<p><a href="{{ url_for('index') }}">{{ _('Back') }}</a></p>
 
 {% endblock %}
+
+<!--
+The {{ ... }} needs to be added to force the _() to be evaluated instead of being considered a literal in the template.
+-->
