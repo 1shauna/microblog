@@ -4,41 +4,31 @@
 {% from 'bootstrap/nav.html' import render_nav_item as rni %}
 
 
-  {% block title %}
-    {% if title %}{{ title }} - Microblog
-    {% else %}My Microblog
-    {% endif %}
-  {% endblock title %}
-
-
-
   {% block navbar %}
-  <nav class='navbar navbar-default'>
-    <div class='container'>
+  <div class='container'>
+    <nav class='navbar navbar-expand-sm navbar-light bg-light'>
+      <button type='button' class='navbar-toggler' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1' aria-expanded='false' aria-label='Toggle navigation'>
+        <span class='navbar-toggler-icon'></span>
+      </button>
+      <a class="navbar-brand" href='/index'>HomeAlone</a>
 
-      <div class='navbar-header'>
-        <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1' aria-expanded='false'>
-        </button>
-        {{ rni('index', 'Microblog') }}
-      </div>
-
-      <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
-        <ul class='navbar-nav'>
+      <div class='collapse navbar navbar-collapse d-flex justify-content-between' id='bs-example-navbar-collapse-1'>
+        <ul class='navbar-nav nav-pills'>
           {{ rni('index', 'Home', use_li=True) }}
           {{ rni('explore', 'Explore', use_li=True) }}
         </ul>
-        <ul class='navbar-nav navbar-right'>
+        <ul class='navbar-nav nav-pills'>
           {% if current_user.is_anonymous %}
             {{ rni('login', 'Login', use_li=True) }}
           {% else %}
-            {{ rni('user', 'Profile', use_li=True, username=current_user.username) }}
+            {{ rni('user', 'Profile', username=current_user.username) }}
             {{ rni('logout', 'Logout', use_li=True) }}
           {% endif %}
         </ul>
       </div>
 
-    </div>
-  </nav>
+    </nav>
+  </div>
   {% endblock navbar %}
 
 

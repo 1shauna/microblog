@@ -6,7 +6,6 @@ the author recognize which template files are sub-templates
 	Sub templates are INCLUDED into the template (see user.html)
   -->
 
- {% from 'bootstrap/pagination.html' import render_pager as pager, render_pagination as pagination %}
 
  <table class='table table-hover'>
  	<tr>
@@ -21,7 +20,9 @@ the author recognize which template files are sub-templates
  			<a href="{{ url_for('user', username=post.author.username) }}">
  				{{ post.author.username }}
  			</a>
- 			says: <br>{{ post.body }}
+ 			said {{ moment(post.timestamp).fromNow() }}:
+ 			<br>
+ 			{{ post.body }}
  		</td>
 
  	</tr>

@@ -45,7 +45,7 @@ def index():
 
 	return render_template(
 		'index.html',
-		title='HomeAlone',
+		title='Home',
 		form=form,
 		posts=posts,
 		pages=pages,

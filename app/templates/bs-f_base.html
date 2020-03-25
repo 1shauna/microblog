@@ -5,11 +5,15 @@
     {% block head %}
 
       <meta charset='utf-8'>
-      <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+      <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=false'>
 
       {% block styles %}{{ bootstrap.load_css() }}{% endblock %}
 
-      <title>{% block title %}{% endblock title %}</title>
+      <title>
+        {% if title %}{{ title }} - Microblog
+        {% else %}My Microblog
+        {% endif %}
+      </title>
 
     {% endblock head %}
   </head>
@@ -19,7 +23,10 @@
 
   {% block content %}{% endblock %}
 
-  {% block scripts %}{{ bootstrap.load_js() }}{% endblock %}
+  {% block scripts %}
+    {{ bootstrap.load_js() }}
+    {{ moment.include_moment() }}
+  {% endblock %}
 
 </body>
 </html>
