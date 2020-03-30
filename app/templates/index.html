@@ -7,7 +7,7 @@
 
 
 {% block app_content %}
-  <h1>{{ _('Hey there, {{ current_user.username }}!') }}</h1>
+  <h1>{{ _('Hey there, %(username)s!', username=current_user.username) }}</h1>
 
   {% if form %}
     {{ rf(form) }}
@@ -22,8 +22,8 @@
   <p>{{ _('A fancier pagination style:') }}</p>
   {{ pagination(
       pages,
-      prev=('<span aria-hidden="true">&larr;</span> {{ _("Newer posts") }}'|safe,
-      next=("Older posts <span aria-hidden='true'>&rarr;</span>")|safe
+      prev=('<span aria-hidden="true">&larr;</span>{}'.format( _(" Newer posts") ))|safe,
+      next=('{}<span aria-hidden="true">&rarr;</span>'.format( _("Older posts ") ))|safe
   ) }}
 
 

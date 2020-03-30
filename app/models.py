@@ -229,6 +229,7 @@ class Post(db.Model):
 	# Also, utc ensures uniform timestamps, regardless where users are located
 	# and will be converted to the user's local time when displayed.
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	language = db.Column(db.String(5))
 
 	def __repr__(self):
 		return '<Post {}>'.format(self.body)
