@@ -1,8 +1,9 @@
 
 {% extends 'bs-f_base.html' %}
-
 {% from 'bootstrap/nav.html' import render_nav_item as rni %}
+{% from 'bootstrap/pagination.html' import render_pagination as rp %}
 
+  {% block title %}{% endblock %}
 
   {% block navbar %}
   <div class='container'>
@@ -14,15 +15,15 @@
 
       <div class='collapse navbar navbar-collapse d-flex justify-content-between' id='bs-example-navbar-collapse-1'>
         <ul class='navbar-nav nav-pills'>
-          {{ rni('index', _('Home'), use_li=True) }}
-          {{ rni('explore', _('Explore'), use_li=True) }}
+          {{ rni('main.index', _('Home'), use_li=True) }}
+          {{ rni('main.explore', _('Explore'), use_li=True) }}
         </ul>
         <ul class='navbar-nav nav-pills'>
           {% if current_user.is_anonymous %}
-            {{ rni('login', _('Login'), use_li=True) }}
+            {{ rni('auth.login', _('Login'), use_li=True) }}
           {% else %}
-            {{ rni('user', _('Profile'), username=current_user.username) }}
-            {{ rni('logout', _('Logout'), use_li=True) }}
+            {{ rni('main.user', _('Profile'), username=current_user.username) }}
+            {{ rni('auth.logout', _('Logout'), use_li=True) }}
           {% endif %}
         </ul>
       </div>
@@ -48,5 +49,8 @@
       <!-- The block named `content` is used by Flask-Bootstrap, so I renamed my content block as `app_content`, as below. -->
       {% block app_content %}{% endblock %}
 
+
     </div>
   {% endblock content %}
+
+

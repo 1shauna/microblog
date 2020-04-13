@@ -1,9 +1,9 @@
 {% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form as rf %}
 
 <!--
 Instead of having to style the form fields one by one, Flask-Bootstrap comes with a macro that accepts a Flask-WTF form object as an argument and renders the complete form using Bootstrap styles.
  -->
-{% from 'bootstrap/form.html' import render_form as rf %}
 
 
 {% block app_content %}

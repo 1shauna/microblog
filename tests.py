@@ -2,19 +2,27 @@ from datetime import datetime, timedelta
 import unittest # comes with Python!
 from app import app, db
 from app.models import User, Post
+from config import Config
 
 ## Run with `python tests.py`, of course
 
+class TestConfig(Config):
+	TESTING = True
+	SQLALCHEMY_DATABASE_URI = 'sqlite://'
+	# overrides in-memory db to create its own testing db
+
+
 class UserModelCase(unittest.TestCase):
 	def setUp(self):
-		app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+		self.app = create_app(TestConfig)
+		self.app_context = self.app.app_context()
+		self.app_context.push()
 		db.create_all()
-		# HACK: instead of useing the regular db for these tests,
-		# get SQLAlchemy to use an in-memory SQLite db: 'sqlite://'
 
 	def tearDown(self):
 		db.session.remove()
 		db.drop_all()
+		self.app_context.pop()
 
 	def test_password_hashing(self):
 		u = User(username='susan')
